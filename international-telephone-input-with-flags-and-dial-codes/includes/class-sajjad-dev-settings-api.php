@@ -2,11 +2,10 @@
 /**
  * File containing the definition of the Sajjad_Dev_Settings_API class.
  *
- * This file defines the Sajjad_Dev_Settings_API class, a wrapper for the WordPress Options API.
+ * This file defines the Sajjad_Dev_Settings_API class, a wrapper for the WordPress Settings API.
  *
- * @package       International_Telephone_Input_With_Flags_And_Dial_Codes
- * @subpackage    International_Telephone_Input_With_Flags_And_Dial_Codes/public
- * @author        Sajjad Hossain Sagor <sagorh672@gmail.com>
+ * @package    Sajjad_Dev_Settings_API
+ * @author     Sajjad Hossain Sagor <sagorh672@gmail.com>
  */
 
 if ( ! class_exists( 'Sajjad_Dev_Settings_API' ) ) :
@@ -40,6 +39,7 @@ if ( ! class_exists( 'Sajjad_Dev_Settings_API' ) ) :
 		 * Allowed html tags array.
 		 *
 		 * @since     2.0.0
+		 * @static
 		 * @access    public
 		 * @var       array
 		 */
@@ -426,7 +426,7 @@ if ( ! class_exists( 'Sajjad_Dev_Settings_API' ) ) :
 				if ( isset( $section['desc'] ) && ! empty( $section['desc'] ) ) {
 					$section['desc'] = '<div class="inside">' . $section['desc'] . '</div>';
 					$callback        = function () use ( $section ) {
-						echo esc_textarea( str_replace( '"', '\"', $section['desc'] ) );
+						echo wp_kses( $section['desc'], self::$allowed_html_tags );
 					};
 				} elseif ( isset( $section['callback'] ) ) {
 					$callback = $section['callback'];
@@ -694,7 +694,8 @@ if ( ! class_exists( 'Sajjad_Dev_Settings_API' ) ) :
 		 * @param     array $args Settings field args.
 		 */
 		public function callback_html( $args ) {
-			echo wp_kses( $this->get_field_description( $args ), self::$allowed_html_tags );
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo $this->get_field_description( $args );
 		}
 
 		/**
@@ -892,23 +893,30 @@ if ( ! class_exists( 'Sajjad_Dev_Settings_API' ) ) :
 		}
 
 		/**
-		 * Get the value of a settings field
+		 * Retrieves the value of a specific settings field.
+		 *
+		 * This method fetches the value of a settings field from the WordPress options database.
+		 * It retrieves the entire option group for the given section and then extracts the
+		 * value for the specified field.
 		 *
 		 * @since     2.0.0
 		 * @access    public
-		 * @param     string $option      Settings field name.
-		 * @param     string $section     The section name this field belongs to.
-		 * @param     string $default_val Default text if it's not found.
-		 * @return    string
+		 * @param     string $option        The name of the settings field.
+		 * @param     string $section       The name of the section this field belongs to. This corresponds
+		 *                                  to the option name used in `register_setting()`.
+		 * @param     string $default_value Optional. The default value to return if the field's value
+		 *                                  is not found in the database. Default is an empty string.
+		 * @return    string|mixed          The value of the settings field, or the default value if not found.
 		 */
-		public function get_option( $option, $section, $default_val = '' ) {
-			$options = get_option( $section );
+		public function get_option( $option, $section, $default_value = '' ) {
+			$options = get_option( $section ); // Get all options for the section.
 
+			// Check if the option exists within the section's options array.
 			if ( isset( $options[ $option ] ) ) {
-				return $options[ $option ];
+				return $options[ $option ]; // Return the option value.
 			}
 
-			return $default_val;
+			return $default_value; // Return the default value if the option is not found.
 		}
 
 		/**
@@ -920,7 +928,7 @@ if ( ! class_exists( 'Sajjad_Dev_Settings_API' ) ) :
 		 * @access    public
 		 */
 		public function show_navigation() {
-			$html  = '<h2 class="nav-tab-wrapper">';
+			$html  = '<h1 class="nav-tab-wrapper">';
 			$count = count( $this->settings_sections );
 
 			// don't show the navigation if only one section exists.
@@ -932,7 +940,7 @@ if ( ! class_exists( 'Sajjad_Dev_Settings_API' ) ) :
 				$html .= sprintf( '<a href="#%1$s" class="nav-tab" id="%1$s-tab">%2$s</a>', $tab['id'], $tab['title'] );
 			}
 
-			$html .= '</h2>';
+			$html .= '</h1>';
 
 			echo wp_kses( $html, self::$allowed_html_tags );
 		}
@@ -981,7 +989,7 @@ if ( ! class_exists( 'Sajjad_Dev_Settings_API' ) ) :
 			<script type="text/javascript">
 			jQuery( document ).ready( function( $ )
 			{
-				// Switches option sections
+				// Switches option sections.
 				$( '.group' ).hide();
 				
 				$( '.wp-color-picker-field' ).wpColorPicker();
@@ -993,7 +1001,7 @@ if ( ! class_exists( 'Sajjad_Dev_Settings_API' ) ) :
 					activetab = localStorage.getItem( 'activetab' );
 				}
 
-				//if url has section id as hash then set it as active or override the current local storage value
+				// if url has section id as hash then set it as active or override the current local storage value.
 				if( window.location.hash )
 				{
 					activetab = window.location.hash;
@@ -1080,7 +1088,7 @@ if ( ! class_exists( 'Sajjad_Dev_Settings_API' ) ) :
 						self.prev( '.sajjaddev-url' ).val( attachment.url ).change();
 					} );
 
-					// Finally, open the modal
+					// Finally, open the modal.
 					file_frame.open();
 				} );
 			} );

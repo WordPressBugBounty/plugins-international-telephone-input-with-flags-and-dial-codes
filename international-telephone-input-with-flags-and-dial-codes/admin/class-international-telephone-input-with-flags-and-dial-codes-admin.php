@@ -1,6 +1,6 @@
 <?php
 /**
- * This file contains the definition of the WP_Edit_Username_Admin class, which
+ * This file contains the definition of the International_Telephone_Input_With_Flags_And_Dial_Codes_Admin class, which
  * is used to load the plugin's admin-specific functionality.
  *
  * @package       International_Telephone_Input_With_Flags_And_Dial_Codes
@@ -273,6 +273,7 @@ class International_Telephone_Input_With_Flags_And_Dial_Codes_Admin {
 	 * the corresponding country names.
 	 *
 	 * @since     2.0.0
+	 * @static
 	 * @access    public
 	 * @return    array An associative array of countries (ISO code => country name).
 	 */
