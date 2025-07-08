@@ -13,8 +13,8 @@
  * Plugin Name:       International Telephone Input With Flags And Dial Codes
  * Plugin URI:        https://wordpress.org/plugins/international-telephone-input-with-flags-and-dial-codes/
  * Description:       Plugin turns the standard telephone input into an International Telephone Input with a national flag drop down list respective Country dial codes.
- * Version:           2.0.1
- * Requires at least: 6.5
+ * Version:           2.0.2
+ * Requires at least: 5.6
  * Requires PHP:      8.1
  * Author:            Sajjad Hossain Sagor
  * Author URI:        https://sajjadhsagor.com/
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Currently plugin version.
  */
-define( 'INTERNATIONAL_TELEPHONE_INPUT_WITH_FLAGS_AND_DIAL_CODES_PLUGIN_VERSION', '2.0.1' );
+define( 'INTERNATIONAL_TELEPHONE_INPUT_WITH_FLAGS_AND_DIAL_CODES_PLUGIN_VERSION', '2.0.2' );
 
 /**
  * Define Plugin Folders Path
@@ -72,8 +72,7 @@ function on_deactivate_international_telephone_input_with_flags_and_dial_codes()
 register_deactivation_hook( __FILE__, 'on_deactivate_international_telephone_input_with_flags_and_dial_codes' );
 
 /**
- * The core plugin class that is used to define internationalization,
- * admin-specific hooks, and public-facing site hooks.
+ * The core plugin class that is used to define admin-specific and public-facing hooks.
  *
  * @since    2.0.0
  */
